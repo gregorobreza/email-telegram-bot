@@ -142,7 +142,7 @@ class BillEmailBot:
 
                 else:
                     mail_content = message.get_payload()
-                    logging.info("no pdf attachment found")
+                    # logging.info("no pdf attachment found")
 
 
 def main():
