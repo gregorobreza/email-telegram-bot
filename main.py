@@ -90,8 +90,15 @@ class BillEmailBot:
                     mail_from = message["from"]
                     mail_subject = message["subject"]
                     mail_date = message["date"]
-                    date_obj = datetime.strptime(mail_date, "%a, %d %b %Y %H:%M:%S %z")
-                    from_folder_name = str(mail_from).split("<")[1].replace(">", "")
+                    try:
+                        date_obj = datetime.strptime(mail_date, "%a, %d %b %Y %H:%M:%S %z")
+                    except ValueError:
+                        date_obj = datetime.strptime(mail_date, "%d %b %Y %H:%M:%S %z")
+                    if ("<" in mail_from):
+                        
+                        from_folder_name = str(mail_from).split("<")[1].replace(">", "")
+                    else:
+                        from_folder_name = mail_from
                     date_folder_path = os.path.join(
                         from_folder_name, datetime.strftime(date_obj, "%Y-%m-%d")
                     )
@@ -150,7 +157,7 @@ def main():
         filename="billbot.log", format="%(levelname)s: %(message)s  %(asctime)s", level=logging.INFO
     )
     logging.info("Started")
-    emailbot = BillEmailBot(time_delay=6)
+    emailbot = BillEmailBot(time_delay=12)
     emailbot.check_email()
     logging.info("Finished")
 
